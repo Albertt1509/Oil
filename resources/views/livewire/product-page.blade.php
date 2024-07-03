@@ -60,15 +60,19 @@
                     </div>
                     <div class="w-full px-3 lg:w-3/4">
                         <div class="px-3 mb-4">
-                            <div class="items-center justify-between hidden px-3 py-2 bg-gray-100 md:flex  ">
-                                <div class="flex items-center justify-between">
-                                    <select name="" id=""
-                                        class="block w-40 text-base bg-gray-100 cursor-pointer dark:text-gray-400 ">
-                                        <option value="">Sort by latest</option>
-                                        <option value="">Sort by Price</option>
-                                    </select>
-                                </div>
+                            <div class="i hidden px-3 py-2 md:flex justify-end">
+                                <input type="text"
+                                    class="border-0 border-b-2 border-black bg-gray-50 focus:outline-none focus:border-black placeholder-gray-500"
+                                    placeholder="search" wire:model.debounce.500ms="search">
+                                <button type="submit" wire:click="searchUpdated">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="h-5 w-5 ml-2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                    </svg>
+                                </button>
                             </div>
+
                         </div>
                         <div class="flex flex-wrap items-center">
                             @foreach ($products as $product)
@@ -79,7 +83,7 @@
                                                 <img src="{{ url('storage', $product->images[0]) }}"
                                                     alt="Product Image" class="object-cover w-full h-56">
                                             </a>
-                                            <a href="/cart"
+                                            <a wire:click.prevent='addToCart ({{ $product->id }})' href=""
                                                 class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"

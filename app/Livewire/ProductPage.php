@@ -2,46 +2,82 @@
 
 namespace App\Livewire;
 
+use App\Helpers\CartManagement;
+use App\Livewire\Partials\Navbar;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Url ;
+use Livewire\Attributes\Url;
 
 #[Title('Products - Evans')]
 class ProductPage extends Component
 {
+    use LivewireAlert;
+
     public $inStock = false;
     public $onSale = false;
     public $selected_categories = [];
     public $selected_brands = [];
-    
-    #[url]
+
+    #[Url]
     public $featured;
 
-    #[url]
+    #[Url]
     public $on_sale;
 
+    #[Url]
+    public $search;
+
+    public function addToCart($product_id){
+    $total_count = CartManagement::addItemsCart($product_id);
+    
+    $this->dispatch('update-cart-count',total_count: $total_count)->to(Navbar::class);
+
+    $this->alert('success', 'Product Added!', [
+    'position' => 'center',
+    'timer' => 3000,
+    'toast' => true,
+]);
+}
+
     use WithPagination;
+
+    public function searchUpdated()
+    {
+        $this->resetPage();
+    }
+
     public function render()
     {
         $productQuery = Product::query()->where('is_active', 1);
-        if(!empty($this->selected_categories)){
-            $productQuery->whereIn('category_id',$this->selected_categories);
+
+        if (!empty($this->selected_categories)) {
+            $productQuery->whereIn('category_id', $this->selected_categories);
         }
 
-        if(!empty($this->selected_brands)){
-            $productQuery->whereIn('brand_id',$this->selected_brands);
+        if (!empty($this->selected_brands)) {
+            $productQuery->whereIn('brand_id', $this->selected_brands);
         }
 
-        if($this->featured){
-            $productQuery->where('is_featured',1);
+        if ($this->featured) {
+            $productQuery->where('is_featured', 1);
         }
-        if($this->on_sale){
-            $productQuery->where('on_sale',1);
+
+        if ($this->on_sale) {
+            $productQuery->where('on_sale', 1);
         }
+
+        if (!empty($this->search)) {
+            $productQuery->where(function($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                      ->orWhere('description', 'like', '%' . $this->search . '%');
+            });
+        }
+
         return view('livewire.product-page', [
             'products' => $productQuery->paginate(9),
             'brands' => Brand::where('is_active', 1)->get(['id', 'name', 'slug']),
