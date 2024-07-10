@@ -7,37 +7,74 @@ use Illuminate\Support\Facades\Cookie;
 
 class CartManagement{
     //add item to cart with qty
-    static public function addItemsCart($product_id, $qty){
-        $cart_items = self::getCartItemsCookie();
+   static public function addItemsCart($product_id){
+    $cart_items = self::getCartItemsCookie();
 
-        $existing_item=null;
-        foreach($cart_items as $key =>$items){
-            if($items['product_id']== $product_id){
-                $existing_item=$key;
-                break;
-            }
+    $existing_item = null;
+    foreach($cart_items as $key => $item){
+        if($item['product_id'] == $product_id){
+            $existing_item = $key;
+            break;
         }
-        if($existing_item !==null){
-            $cart_items[$existing_item]['quantity']++;
-            $cart_items[$existing_item]['total_amount']= $cart_items[$existing_item];
-            $cart_items[$existing_item]['unit_amount'];
-        }else{
-            $product = Product::where('id',$product_id)->first(['id','name','price','images']);
+    }
+
+    if($existing_item !== null){
+        // Item already exists in cart
+        $cart_items[$existing_item]['quantity']++;
+        $cart_items[$existing_item]['total_amount'] = $cart_items[$existing_item]['quantity'] * $cart_items[$existing_item]['unit_amount'];
+    } else {
+        // Item does not exist in cart, add new item
+        $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
         if($product){
-            $cart_items[]=[
-                'product_id'=>$product_id,
-                'name'=>$product->name,
-                'image'=>$product->image,
-                'quantity'=>1,
-                'unit_amount'=>$product->price,
-                'total_amount'=>$product->price,
+            $cart_items[] = [
+                'product_id' => $product_id,
+                'name' => $product->name,
+                'image' => $product->images, // Ensure this matches your actual field name
+                'quantity' => 1,
+                'unit_amount' => $product->price,
+                'total_amount' => $product->price,
             ];
         }
     }
+
     self::addCartItemToCookie($cart_items);
     return count($cart_items);
+}
 
+static public function addItemsCartQty($product_id, $qty = 1){
+    $cart_items = self::getCartItemsCookie();
+
+    $existing_item = null;
+    foreach($cart_items as $key => $item){
+        if($item['product_id'] == $product_id){
+            $existing_item = $key;
+            break;
+        }
     }
+
+    if($existing_item !== null){
+        // Update quantity and recalculate total_amount
+        $cart_items[$existing_item]['quantity'] = $qty;
+        $cart_items[$existing_item]['total_amount'] = $qty * $cart_items[$existing_item]['unit_amount'];
+    } else {
+        // Item does not exist in cart, add new item
+        $product = Product::where('id', $product_id)->first(['id', 'name', 'price', 'images']);
+        if($product){
+            $cart_items[] = [
+                'product_id' => $product_id,
+                'name' => $product->name,
+                'image' => $product->images, // Ensure this matches your actual field name
+                'quantity' => $qty,
+                'unit_amount' => $product->price,
+                'total_amount' => $qty * $product->price,
+            ];
+        }
+    }
+
+    self::addCartItemToCookie($cart_items);
+    return count($cart_items);
+}
+
 
     static public function removeCartItem($product_id){
         $cart_items=self::getCartItemsCookie();

@@ -38,7 +38,7 @@ class ProductPage extends Component
     $this->dispatch('update-cart-count',total_count: $total_count)->to(Navbar::class);
 
     $this->alert('success', 'Product Added!', [
-    'position' => 'center',
+    'position' => 'top-right',
     'timer' => 3000,
     'toast' => true,
 ]);

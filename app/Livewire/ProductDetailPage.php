@@ -15,19 +15,20 @@ class ProductDetailPage extends Component
     use LivewireAlert;
 
     public $slug;
+
     public $quantity = 1;
 
     public function plus(){
         $this->quantity ++;
     }
 
-       public function addToCart($product_id){
-    $total_count = CartManagement::addItemsCart($product_id);
+    public function addToCart($product_id){
+    $total_count = CartManagement::addItemsCartQty($product_id, $this->quantity);
     
     $this->dispatch('update-cart-count',total_count: $total_count)->to(Navbar::class);
 
     $this->alert('success', 'Product Added!', [
-    'position' => 'center',
+    'position' => 'top-right',
     'timer' => 3000,
     'toast' => true,
     ]);
