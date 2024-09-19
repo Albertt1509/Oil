@@ -26,22 +26,25 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/',HomePage::class);
-Route::get('/about',AboutPage::class);
-Route::get('/products',ProductPage::class);
-Route::get('/products/{slug}',ProductDetailPage::class);
-Route::get('/cart',CartPage::class);
-Route::get('/checkout',CheckoutPage::class);
-Route::get('/my-orders',MyorderPage::class);
-Route::get('/my-orders/{order}',MyorderDetailPage::class);
+    Route::get('/',HomePage::class);
+    Route::get('/about',AboutPage::class);
+    Route::get('/products',ProductPage::class);
+    Route::get('/products/{slug}',ProductDetailPage::class);
+    Route::get('/cart',CartPage::class);
 
-//auth
-Route::get('/login',Login::class);
-Route::get('/register',register::class);
-Route::get('/reset',ResetPasswordPage::class);
-Route::get('/forgot',ForgotPasswordPage::class);
+    Route::get('/login', Login::class)->name('login');
+    Route::get('/register', Register::class)->name('register');
+    Route::get('/reset/{token}', ResetPasswordPage::class)->name('password.reset');
+    Route::get('/forgot', ForgotPasswordPage::class)->name('password.request');
 
-
-Route::get('/success',SuccessPage::class);
-Route::get('/cancel',CancelPage::class);
-
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', CheckoutPage::class)->name('checkout');
+    Route::get('/my-orders', MyorderPage::class)->name('my-orders');
+    Route::get('/my-orders/{order_id}', MyorderDetailPage::class)->name('my-order-detail');
+    Route::get('/success', SuccessPage::class)->name('success');
+    Route::get('/cancel', CancelPage::class)->name('cancel');
+    Route::get('logout', function(){
+        auth()->logout();
+        return redirect('/');
+    })->name('logout');
+});

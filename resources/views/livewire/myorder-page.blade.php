@@ -4,11 +4,11 @@
         <div class="-m-1.5 overflow-x-auto">
             <div class="p-1.5 min-w-full inline-block align-middle">
                 <div class="overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <table class="min-w-full divide-y">
                         <thead>
                             <tr>
                                 <th scope="col"
-                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Order</th>
+                                    class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"></th>
                                 <th scope="col"
                                     class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Date</th>
                                 <th scope="col"
@@ -25,63 +25,60 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    18-02-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">Pending</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    12,000.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="#"
-                                        class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
-                                        Details</a>
-                                </td>
-                            </tr>
-
-                            <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    18-02-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">Pending</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    12,000.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="#"
-                                        class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
-                                        Details</a>
-                                </td>
-                            </tr>
-
-                            <tr class="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                                    20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    18-02-2024</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-orange-500 py-1 px-3 rounded text-white shadow">Pending</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200"><span
-                                        class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                                    12,000.00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                                    <a href="#"
-                                        class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
-                                        Details</a>
-                                </td>
-                            </tr>
-
+                            @foreach ($orders as $order)
+                                @php
+                                    $status = '';
+                                    $payment_status = '';
+                                    if ($order->status == 'new') {
+                                        $status =
+                                            '<span class="bg-blue-500 py-1 px-3 rounded text-white shadow">New</span>';
+                                    } elseif ($order->status == 'processing') {
+                                        $status =
+                                            '<span class="bg-yellow-500 py-1 px-3 rounded text-white shadow">Processing</span>';
+                                    } elseif ($order->status == 'shipped') {
+                                        $status =
+                                            '<span class="bg-red-500 py-1 px-3 rounded text-white shadow">Shipped</span>';
+                                    } elseif ($order->status == 'delivered') {
+                                        $status =
+                                            '<span class="bg-purple-500 py-1 px-3 rounded text-white shadow">Delivered</span>';
+                                    } elseif ($order->status == 'cancelled') {
+                                        $status =
+                                            '<span class="bg-gray-500 py-1 px-3 rounded text-white shadow">Cancelled</span>';
+                                    }
+                                    if ($order->payment_status == 'pending') {
+                                        $payment_status =
+                                            '<span class="bg-yellow-500 py-1 px-3 rounded text-white shadow">Pending</span>';
+                                    } elseif ($order->payment_status == 'paid') {
+                                        $payment_status =
+                                            '<span class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span>';
+                                    } elseif ($order->payment_status == 'failed') {
+                                        $payment_status =
+                                            '<span class="bg-red-500 py-1 px-3 rounded text-white shadow">Failed</span>';
+                                    }
+                                @endphp
+                                <tr class="odd:bg-white even:bg-gray-100">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black"
+                                        wire:key="{{ $order->id }}">
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                        {{ $order->created_at->format('d-m-Y') }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                        {!! $status !!}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                        {!! $payment_status !!}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-black">
+                                        {{ Number::currency($order->grand_total, 'IDR') }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                                        <a href="/my-orders/{{ $order->id }}"
+                                            class="bg-slate-600 text-white py-2 px-4 rounded-md hover:bg-slate-500">View
+                                            Details</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

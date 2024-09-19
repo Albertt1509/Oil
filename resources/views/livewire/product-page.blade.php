@@ -116,4 +116,5 @@
             </div>
         </section>
     </div>
+    @include('livewire.partials.footer')
 </div>
