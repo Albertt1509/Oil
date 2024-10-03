@@ -61,6 +61,7 @@ class LatestOrders extends BaseWidget
                 ->dateTime()
 
             ])
+           
 
             ->actions([
             Action::make('View Order')   

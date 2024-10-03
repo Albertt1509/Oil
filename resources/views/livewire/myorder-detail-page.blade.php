@@ -1,5 +1,5 @@
 <div class="w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto">
-    <h1 class="text-4xl font-bold text-slate-500">Order Details</h1>
+    <h1 class="text-4xl font-bold text-slate-500">Detail Pesanan</h1>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-5">
         <div class="flex flex-col bg-white border shadow-sm rounded-xl">
             <div class="p-4 md:p-5 flex gap-x-4">
@@ -17,7 +17,7 @@
                 <div class="grow">
                     <div class="flex items-center gap-x-2">
                         <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Customer
+                            Pelanggan
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
@@ -43,7 +43,7 @@
                 <div class="grow">
                     <div class="flex items-center gap-x-2">
                         <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Order Date
+                            Tanggal Pesanan
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
@@ -69,7 +69,7 @@
                 <div class="grow">
                     <div class="flex items-center gap-x-2">
                         <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Order Status
+                            Status Pesanan
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
@@ -97,7 +97,7 @@
                 <div class="grow">
                     <div class="flex items-center gap-x-2">
                         <p class="text-xs uppercase tracking-wide text-gray-500">
-                            Payment Status
+                            Status Pembayaran
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
@@ -115,9 +115,9 @@
                 <table class="w-full">
                     <thead>
                         <tr>
-                            <th class="text-left font-semibold">Product</th>
-                            <th class="text-left font-semibold">Price</th>
-                            <th class="text-left font-semibold">Quantity</th>
+                            <th class="text-left font-semibold">Produk</th>
+                            <th class="text-left font-semibold">Harga</th>
+                            <th class="text-left font-semibold">Kuantitas</th>
                             <th class="text-left font-semibold">Total</th>
                         </tr>
                     </thead>
@@ -127,7 +127,7 @@
                                 <td class="py-4">
                                     <div class="flex items-center">
                                         <img class="h-16 w-16 mr-4"
-                                            src="{{ url('storage', $item->product->images[0]) }}" alt="Product image">
+                                            src="{{ url('storage', $item->product->images[0]) }}" alt="Gambar produk">
                                         <span class="font-semibold">{{ $item->product->name }}</span>
                                     </div>
                                 </td>
@@ -142,13 +142,13 @@
                 </table>
             </div>
             <div class="bg-white overflow-x-auto rounded-lg shadow-md p-6 mb-4">
-                <h1 class="font-3xl font-bold text-slate-500 mb-3">Shipping Address</h1>
+                <h1 class="font-3xl font-bold text-slate-500 mb-3">Alamat Pengiriman</h1>
                 <div class="flex justify-between items-center">
                     <div>
                         <p>{{ $address->street_address }} {{ $address->zip_code }}</p>
                     </div>
                     <div>
-                        <p class="font-semibold">Phone:</p>
+                        <p class="font-semibold">Telepon:</p>
                         <p>{{ $address->phone }}</p>
                     </div>
                 </div>

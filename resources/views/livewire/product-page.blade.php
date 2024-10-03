@@ -96,7 +96,7 @@
                                         <div class="p-4 bg-yellow-600 text-white">
                                             <h3 class="text-lg font-medium mb-2">{{ $product->name }}</h3>
                                             <p class="text-sm">{{ Number::currency($product->price, 'IDR') }}</p>
-                                            <a href="#"
+                                            <a href="/products/{{ $product->slug }}"
                                                 class="bg-white text-yellow-600 p-2 rounded-lg flex items-center justify-center mt-3">
                                                 <span>Buy</span>
                                             </a>

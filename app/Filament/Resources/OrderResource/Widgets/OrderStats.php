@@ -27,4 +27,5 @@ class OrderStats extends BaseWidget
 
         return $totalSales;
     }
+
 }

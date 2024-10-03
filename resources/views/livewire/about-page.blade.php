@@ -3,13 +3,16 @@
         <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
             <div>
                 <h1 class="block text-3xl font-bold text-gray-600 sm:text-4xl lg:text-6xl lg:leading-tight ">
-                    About Us
+                    Tentang Kita
                 </h1>
-                <p class="mt-3 text-lg text-justify ">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa eligendi pariatur fugit earum, dolore
-                    sint deserunt laudantium dignissimos amet rem animi eveniet molestiae cupiditate corrupti
-                    repellendus, possimus et, voluptate velit.
+                <p class="mt-3 text-lg text-justify">
+                    Kami adalah perusahaan yang berdedikasi untuk menyediakan produk minyak goreng berkualitas tinggi
+                    yang sehat dan alami. Dengan pengalaman bertahun-tahun dalam industri ini, kami terus berinovasi
+                    untuk memastikan bahwa setiap tetes minyak yang kami produksi memenuhi standar terbaik, baik dari
+                    segi rasa maupun kesehatan. Kami percaya bahwa minyak goreng yang baik dapat meningkatkan kualitas
+                    makanan dan memberikan manfaat kesehatan yang optimal bagi keluarga Anda.
                 </p>
+
             </div>
             <div class="flex w-96 h-80 bg-white rounded-lg shadow-md">
                 <img class="w-full rounded-md" src={{ asset('images/logo.png') }} alt="Image Description">
@@ -19,7 +22,7 @@
         <div class="flex flex-col lg:flex-row justify-between items-start p-6 space-y-6 lg:space-y-0 lg:space-x-6">
             <div class="space-y-4">
                 <div class="block text-3xl font-bold text-gray-600 sm:text-4xl lg:text-6xl lg:leading-tight">
-                    <h1>Contact Us</h1>
+                    <h1>Hubungi</h1>
                 </div>
                 <div class="space-y-4">
                     <div class="flex items-center space-x-2 mb-4">
@@ -49,7 +52,7 @@
                 </div>
             </div>
             <div class="space-y-4">
-                <h1 class="block text-3xl font-bold text-gray-600 sm:text-4xl lg:text-6xl lg:leading-tight">Location
+                <h1 class="block text-3xl font-bold text-gray-600 sm:text-4xl lg:text-6xl lg:leading-tight">Lokasi
                 </h1>
                 <div class="flex items-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

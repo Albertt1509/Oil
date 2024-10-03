@@ -45,6 +45,7 @@ class OrderResource extends Resource
                     Select::make('payment_method')
                         ->options([
                             'Transfer' => 'Transfer',
+                            'Qris' => 'Qris',
                             'cod' => 'Cash On Delivery',
                         ]),
                     Select::make('payment_status')
