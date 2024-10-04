@@ -132,17 +132,19 @@
                     <!-- Dropdown Info Bank -->
                     <div id="bank-info" class="hidden mt-4 p-4 bg-gray-100 rounded-lg">
                         <h3 class="font-semibold text-lg">Informasi Transfer Bank</h3>
-                        <ul class="list-disc pl-5 mt-2">
-                            <li>Bank: Bank ABC</li>
-                            <li>Nomor Rekening: 1234567890</li>
-                            <li>Atas Nama: Nama Pemilik Rekening</li>
-                        </ul>
+                        @foreach ($transfers as $transfer)
+                            <ul class="list-disc pl-5 mt-2">
+                                <li>Bank:{{ $transfer->nama_bank }}</li>
+                                <li>Nomor Rekening: {{ $transfer->rekening }}</li>
+                                <li>Atas Nama: {{ $transfer->nama_penerima }}</li>
+                            </ul>
+                        @endforeach
                     </div>
 
                     <!-- Gambar QRIS -->
                     <div id="qris-image" class="hidden mt-4">
-                        <h3 class="font-semibold text-lg">Gambar QRIS</h3>
-                        <img src="https://via.placeholder.com/150" alt="QRIS" class="mt-2 w-48 h-48">
+                        <h3 class="font-semibold text-lg">QRIS</h3>
+                        <img src={{ url('storage', $transfer->gambar) }} alt="QRIS" class="mt-2 w-48 h-48">
                     </div>
                 </div>
                 <!-- Akhir Kartu -->

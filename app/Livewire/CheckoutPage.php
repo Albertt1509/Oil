@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Helpers\CartManagement;
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\Transfer;
 use Livewire\Component;
 use Livewire\Attributes\Title;
 use Stripe\Stripe;
@@ -91,11 +92,13 @@ class CheckoutPage extends Component
 
     public function render()
     {
+        $transfers = Transfer::all();
         $cart_items = CartManagement::getCartItemsCookie();
         $grand_total = CartManagement::calculateGrandTotal($cart_items);
         return view('livewire.checkout-page',[
             'cart_items' => $cart_items,
-            'grand_total' => $grand_total 
+            'grand_total' => $grand_total,
+            'transfers' => $transfers
         ]);
     }
 }

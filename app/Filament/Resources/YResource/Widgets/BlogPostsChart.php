@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\YResource\Widgets;
 
-use App\Models\Product; // Ganti Order dengan Product
+use App\Models\Product; 
 use Filament\Widgets\ChartWidget;
 
 class OrdersChart extends ChartWidget // Ganti nama kelas
