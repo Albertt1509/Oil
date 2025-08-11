@@ -22,6 +22,9 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Resources\YResource\Widgets\OrdersChart;
 use App\Filament\Widgets\LatestOrders;
 
+// Tambahkan use ExportOrdersWidget di sini:
+use App\Filament\Widgets\ExportOrdersWidget;
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -37,20 +40,18 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources\\YResource')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            
             ->pages([
                 Pages\Dashboard::class,
             ])
-           ->widgets([])
+            // Hapus ini jika mau, karena diganti yang bawah
+            // ->widgets([])
             ->widgets([
                 OrderStats::class,
                 OrderPieChart::class,
                 OrdersChart::class,
-                LatestOrders::class
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
-                ])
-        
+                LatestOrders::class,
+                ExportOrdersWidget::class,  
+            ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->middleware([
                 EncryptCookies::class,
@@ -63,7 +64,6 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-          
             ->authMiddleware([
                 Authenticate::class,
             ]);

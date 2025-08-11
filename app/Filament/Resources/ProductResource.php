@@ -57,7 +57,12 @@ class ProductResource extends Resource
                             ->numeric()
                             ->required()
                             ->prefix('IDR')
-                            ->columnSpanFull(),
+                            ->columnSpan(1),
+
+                        TextInput::make('quantity')
+                            ->numeric()
+                            ->required()
+                            ->columnSpan(1),
 
                         Select::make('category_id')
                             ->label('Category')
@@ -134,16 +139,16 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()
                 ->sortable()
-                ->toggleable(true), // Change to true
+                ->toggleable(true),
                 Tables\Columns\TextColumn::make('updated_at')
                 ->dateTime()
                 ->sortable()
-                ->toggleable(true), // Change to true
+                ->toggleable(true), 
 
             ])
             ->filters([
                 Filters\SelectFilter::make('category')
-                ->relationship('category', 'name'), // Perhatikan pemisahan antara nama relasi dan nama kolom
+                ->relationship('category', 'name'),
 
                 Filters\SelectFilter::make('brand')
                 ->relationship('brand', 'name'),

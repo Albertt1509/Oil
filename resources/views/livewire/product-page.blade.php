@@ -80,8 +80,8 @@
                                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                                         <div class="relative">
                                             <a href="/products/{{ $product->slug }}">
-                                                <img src="{{ url('storage', $product->images[0]) }}"
-                                                    alt="Product Image" class="object-cover w-full h-56">
+                                            <img src="{{ url('storage', $product->images[0]) }}"
+                                                alt="Product Image" class="object-cover w-full h-56">
                                             </a>
                                             <button wire:click='addToCart ({{ $product->id }})' href=""
                                                 class="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">

@@ -56,12 +56,6 @@ class OrderResource extends Resource
                         ])
                         ->default('pending')
                         ->required(),
-                    Select::make('shipping_method')
-                        ->options([
-                            'gojek' => 'GoSend',
-                            'maxim' => 'Maxim Delivery',
-                            'grab' => 'GrabExpress',
-                        ]),
                     ToggleButtons::make('status')
                         ->inline()
                         ->columnSpanFull()
@@ -165,6 +159,9 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
                     ->label('Customer'),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->searchable()
+                    ->label('Category'),
                 Tables\Columns\TextColumn::make('grand_total')
                     ->searchable()
                     ->numeric()
