@@ -50,7 +50,7 @@ class AdminPanelProvider extends PanelProvider
                 OrderPieChart::class,
                 OrdersChart::class,
                 LatestOrders::class,
-                ExportOrdersWidget::class,  
+                // ExportOrdersWidget::class,  
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->middleware([
