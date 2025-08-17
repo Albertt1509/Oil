@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class OrderItem extends Model
 {
@@ -31,17 +30,26 @@ class OrderItem extends Model
     protected static function booted()
     {
         static::created(function ($orderItem) {
-            DB::transaction(function () use ($orderItem) {
-                $product = $orderItem->product;
+            $stock = \App\Models\Stock::where('product_id', $orderItem->product_id)->first();
 
-                if ($product) {
-                    $newQuantity = max(0, $product->quantity - $orderItem->quantity);
-                    $product->update([
-                        'quantity' => $newQuantity,
-                        'in_stock' => $newQuantity > 0
-                    ]);
-                }
-            });
+            if ($stock) {
+                // Update stock (isGoing & totalonHand)
+                $sold = OrderItem::where('product_id', $orderItem->product_id)->sum('quantity');
+                $stock->isGoing     = $sold;
+                $stock->totalonHand = $stock->onHand - $sold;
+                $stock->save();
+
+                // Simpan histori HPP (COGS)
+                $totalCost = $orderItem->quantity * $stock->price;
+
+                \App\Models\COGS::create([
+                    'product_id'       => $orderItem->product_id,
+                    'purchase_price'   => $stock->price,
+                    'quantity_sold'    => $orderItem->quantity,
+                    'total_cost'       => $totalCost,
+                    'transaction_date' => now(),
+                ]);
+            }
         });
     }
 }

@@ -16,7 +16,6 @@ class Product extends Model
         'description',
         'images',
         'price',
-        'quantity',
         'is_active',
         'in_stock',
         'on_sale',
@@ -24,17 +23,6 @@ class Product extends Model
     protected $casts = [
         'images' => 'array'
     ];
-
-    protected static function booted()
-    {
-        static::created(function ($product) {
-            \App\Models\Stock::create([
-                'product_id' => $product->id,
-                'category_id' => $product->category_id,
-                'onHand' => $product->quantity ?? 0,
-            ]);
-        });
-    }
 
 
     public function category()

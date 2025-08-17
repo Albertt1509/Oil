@@ -58,12 +58,7 @@ class ProductResource extends Resource
                             ->required()
                             ->prefix('IDR')
                             ->columnSpan(1),
-
-                        TextInput::make('quantity')
-                            ->numeric()
-                            ->required()
-                            ->columnSpan(1),
-
+                            
                         Select::make('category_id')
                             ->label('Category')
                             ->required()
