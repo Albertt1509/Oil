@@ -15,6 +15,7 @@ class COGS extends Model
         'quantity_sold',
         'total_cost',
         'transaction_date',
+        'monthly_cogs'
     ];
 
        public function product()

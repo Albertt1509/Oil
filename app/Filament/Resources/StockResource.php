@@ -83,13 +83,13 @@ class StockResource extends Resource
                     ->date('d M Y')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('isGoing')
-                    ->label('Is going to be sold')
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('isGoing')
+                //     ->label('Is going to be sold')
+                //     ->sortable(),
 
-                Tables\Columns\TextColumn::make('totalonHand')
-                    ->label('Total On Hand')
-                    ->sortable(),
+                // Tables\Columns\TextColumn::make('totalonHand')
+                //     ->label('Total On Hand')
+                //     ->sortable(),
 
             ])
             ->filters([

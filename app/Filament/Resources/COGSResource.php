@@ -42,7 +42,7 @@ class COGSResource extends Resource
                     ->money('IDR'),
 
                 Tables\Columns\TextColumn::make('hpp')
-                    ->label('COGS')
+                    ->label('COGS Seliing Product')
                     ->money('IDR')
                     ->getStateUsing(fn($record) => $record->quantity_sold * $record->purchase_price),
 
@@ -89,7 +89,7 @@ class COGSResource extends Resource
 //             return Excel::download(new CogsExport(), 'cogs.xlsx');
 //         }),
 // ])
-            ->bulkActions([]);
+        ->bulkActions([]);
     }
 
     public static function getRelations(): array
