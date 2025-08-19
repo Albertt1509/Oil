@@ -12,15 +12,24 @@ class COGS extends Model
        protected $fillable = [
         'product_id',
         'purchase_price',
+        'selling_price',
         'quantity_sold',
-        'total_cost',
+        'total_selling',
         'transaction_date',
-        'monthly_cogs'
+        'profit_per_unit',
     ];
 
        public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+       protected static function booted()
+    {
+        static::saving(function ($cogs) {
+            $cogs->total_selling   = $cogs->selling_price * $cogs->quantity_sold;
+            $cogs->profit_per_unit = $cogs->total_selling - $cogs->purchase_price;
+        });
     }
 
 }

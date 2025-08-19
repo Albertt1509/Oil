@@ -4,14 +4,15 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\COGSResource\Pages;
 use App\Models\COGS;
+use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Components\Select;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters;
-use App\Exports\CogsExport;
-use Filament\Tables\Actions\Action;
+
 class COGSResource extends Resource
 {
     protected static ?string $model = COGS::class;
@@ -20,7 +21,39 @@ class COGSResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form->schema([]);
+        return $form->schema([
+            Select::make('product_id')
+                ->relationship('product', 'name')
+                ->required()
+                ->searchable()
+                ->preload()
+                ->label('Product'),
+
+            Forms\Components\TextInput::make('purchase_price')
+                ->label('Purchase Price')
+                ->numeric()
+                ->prefix('Rp')
+                ->required()
+                ->reactive(), 
+
+            Forms\Components\TextInput::make('selling_price')
+                ->label('Selling Price')
+                ->numeric()
+                ->prefix('Rp')
+                ->required()
+                ->reactive(),
+
+            Forms\Components\TextInput::make('quantity_sold')
+                ->label('Quantity Sold')
+                ->numeric()
+                ->required()
+                ->reactive(), 
+
+            Forms\Components\DatePicker::make('transaction_date')
+                ->label('Transaction Date')
+                ->default(now())
+                ->required(),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -34,33 +67,25 @@ class COGSResource extends Resource
                     ->label('Purchase Price')
                     ->money('IDR'),
 
+                Tables\Columns\TextColumn::make('selling_price')
+                    ->label('Selling Price')
+                    ->money('IDR'),
+
                 Tables\Columns\TextColumn::make('quantity_sold')
                     ->label('Quantity Sold'),
 
-                Tables\Columns\TextColumn::make('total_cost')
-                    ->label('Total Cost')
+                Tables\Columns\TextColumn::make('total_selling')
+                    ->label('Total Selling')
+                    ->money('IDR')
+                    ->getStateUsing(fn($record) => $record->selling_price * $record->quantity_sold),
+
+                Tables\Columns\TextColumn::make('profit_per_unit')
+                    ->label('Profit / Unit')
                     ->money('IDR'),
 
-                Tables\Columns\TextColumn::make('hpp')
-                    ->label('COGS Seliing Product')
-                    ->money('IDR')
-                    ->getStateUsing(fn($record) => $record->quantity_sold * $record->purchase_price),
-
-                Tables\Columns\TextColumn::make('hpp_total')
-                    ->label('Monthly COGS')
-                    ->money('IDR')
-                    ->getStateUsing(function () {
-                        $month = now()->month;
-                        $year  = now()->year;
-
-                        $hppData = \App\Services\HppService::hitungHpp($year, $month);
-
-                        return $hppData['hpp'];
-                    }),
-
                 Tables\Columns\TextColumn::make('transaction_date')
-                    ->label('Date Transaction')
-
+                    ->label('Transaction Date')
+                    ->date(),
             ])
             ->filters([
                 Filters\SelectFilter::make('month')
@@ -81,15 +106,12 @@ class COGSResource extends Resource
                         }
                     }),
             ])
-//            ->actions([
-//     Action::make('Export')
-//         ->label('Export to Excel')
-//         ->icon('heroicon-o-download')
-//         ->action(function () {
-//             return Excel::download(new CogsExport(), 'cogs.xlsx');
-//         }),
-// ])
-        ->bulkActions([]);
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+            ])
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
@@ -101,6 +123,27 @@ class COGSResource extends Resource
     {
         return [
             'index' => Pages\ListCOGS::route('/'),
+            'create' => Pages\CreateCOGS::route('/create'),
+            'edit' => Pages\EditCOGS::route('/{record}/edit'),
         ];
+    }
+
+    /**
+     * Hitung profit_per_unit & total_selling sebelum save
+     */
+    public static function mutateFormDataBeforeCreate(array $data): array
+    {
+        $data['profit_per_unit'] = $data['selling_price'] - $data['purchase_price'];
+        $data['total_selling']   = $data['selling_price'] * $data['quantity_sold'];
+
+        return $data;
+    }
+
+    public static function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['profit_per_unit'] = $data['selling_price'] - $data['purchase_price'];
+        $data['total_selling']   = $data['selling_price'] * $data['quantity_sold'];
+
+        return $data;
     }
 }

@@ -27,24 +27,29 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
-     protected static function booted()
+    protected static function booted()
     {
         static::created(function ($orderItem) {
-            $productId = $orderItem->product_id;
-            $quantityTerjual = $orderItem->quantity;
+            $stock = \App\Models\Stock::where('product_id', $orderItem->product_id)->first();
 
-            $stock = \App\Models\Stock::where('product_id', $productId)->latest()->first();
+            if ($stock) {
+                // Update stock (isGoing & totalonHand)
+                $sold = OrderItem::where('product_id', $orderItem->product_id)->sum('quantity');
+                $stock->isGoing     = $sold;
+                $stock->totalonHand = $stock->onHand - $sold;
+                $stock->save();
 
-            $cogs = \App\Models\COGS::firstOrNew([
-                'product_id' => $productId,
-                'transaction_date' => now()->startOfMonth(), 
-            ]);
+                // Simpan histori HPP (COGS)
+                $totalCost = $orderItem->quantity * $stock->price;
 
-            $cogs->purchase_price = $stock->price ?? $orderItem->price;
-            $cogs->quantity_sold += $quantityTerjual;
-            $cogs->total_cost = $cogs->quantity_sold * $cogs->purchase_price;
-            $cogs->monthly_cogs = $cogs->total_cost;
-            $cogs->save();
+                \App\Models\COGS::create([
+                    'product_id'       => $orderItem->product_id,
+                    'purchase_price'   => $stock->price,
+                    'quantity_sold'    => $orderItem->quantity,
+                    'total_cost'       => $totalCost,
+                    'transaction_date' => now(),
+                ]);
+            }
         });
     }
 }
