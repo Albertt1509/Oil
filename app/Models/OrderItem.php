@@ -27,29 +27,36 @@ class OrderItem extends Model
         return $this->belongsTo(Product::class);
     }
 
-    protected static function booted()
-    {
-        static::created(function ($orderItem) {
-            $stock = \App\Models\Stock::where('product_id', $orderItem->product_id)->first();
+  protected static function booted()
+{
+    static::created(function ($orderItem) {
+        $stock = \App\Models\Stock::where('product_id', $orderItem->product_id)->first();
 
-            if ($stock) {
-                // Update stock (isGoing & totalonHand)
-                $sold = OrderItem::where('product_id', $orderItem->product_id)->sum('quantity');
-                $stock->isGoing     = $sold;
-                $stock->totalonHand = $stock->onHand - $sold;
-                $stock->save();
+        if ($stock) {
+            // Update stock (isGoing & totalonHand)
+            $sold = OrderItem::where('product_id', $orderItem->product_id)->sum('quantity');
+            $stock->isGoing     = $sold;
+            $stock->totalonHand = $stock->onHand - $sold;
+            $stock->save();
 
-                // Simpan histori HPP (COGS)
-                $totalCost = $orderItem->quantity * $stock->price;
+            // Hitung total cost
+            $totalCost = $orderItem->quantity * $stock->price;
 
-                \App\Models\COGS::create([
-                    'product_id'       => $orderItem->product_id,
-                    'purchase_price'   => $stock->price,
-                    'quantity_sold'    => $orderItem->quantity,
-                    'total_cost'       => $totalCost,
-                    'transaction_date' => now(),
-                ]);
-            }
-        });
-    }
+            // Replace data COGS (update kalau sudah ada)
+            \App\Models\COGS::updateOrCreate(
+                [
+                    'product_id' => $orderItem->product_id,   // kunci unik
+                    'transaction_date' => now()->toDateString(), // bisa juga per hari
+                ],
+                [
+                    'purchase_price' => $stock->price,
+                    'quantity_sold'  => $sold, // total semua terjual
+                    'total_selling'  => $sold * $stock->price,
+                    'profit_per_unit'=> 0, // bisa hitung sesuai kebutuhan
+                ]
+            );
+        }
+    });
+}
+
 }

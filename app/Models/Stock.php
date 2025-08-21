@@ -39,15 +39,21 @@ class Stock extends Model
         static::created(function ($stock) {
             $totalCost = $stock->onHand * $stock->price;
 
-            \App\Models\COGS::create([
-                'product_id'       => $stock->product_id,
-                'purchase_price'   => $stock->price,
-                'selling_price'    => 0,
-                'quantity_sold'    => 0,
-                'total_selling'       => $totalCost,
-                'transaction_date' => $stock->transaction_date ?? now(),
-                'profit_per_unit' => 0,
-            ])->save();
+            $date = \Carbon\Carbon::parse($stock->transaction_date ?? now())->toDateString();
+
+            \App\Models\COGS::updateOrCreate(
+                [
+                    'product_id'       => $stock->product_id,
+                    'transaction_date' => $date,
+                ],
+                [
+                    'purchase_price'   => $stock->price,
+                    'selling_price'    => 0,
+                    'quantity_sold'    => 0,
+                    'total_selling'    => $totalCost,
+                    'profit_per_unit'  => 0,
+                ]
+            );
         });
     }
 }
