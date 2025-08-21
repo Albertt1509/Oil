@@ -58,7 +58,6 @@ class StockResource extends Resource
             ]);
     }
 
-    // 🔹 TABLE untuk List View
     public static function table(Table $table): Table
     {
         return $table
@@ -82,15 +81,6 @@ class StockResource extends Resource
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->date('d M Y')
                     ->sortable(),
-
-                Tables\Columns\TextColumn::make('isGoing')
-                    ->label('Is going to be sold')
-                    ->sortable(),
-
-                Tables\Columns\TextColumn::make('totalonHand')
-                    ->label('Total On Hand')
-                    ->sortable(),
-
             ])
             ->filters([
                 Filters\SelectFilter::make('product')
@@ -98,6 +88,7 @@ class StockResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

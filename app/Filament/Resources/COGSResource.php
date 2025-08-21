@@ -34,7 +34,7 @@ class COGSResource extends Resource
                 ->numeric()
                 ->prefix('Rp')
                 ->required()
-                ->reactive(), 
+                ->reactive(),
 
             Forms\Components\TextInput::make('selling_price')
                 ->label('Selling Price')
@@ -47,7 +47,7 @@ class COGSResource extends Resource
                 ->label('Quantity Sold')
                 ->numeric()
                 ->required()
-                ->reactive(), 
+                ->reactive(),
 
             Forms\Components\DatePicker::make('transaction_date')
                 ->label('Transaction Date')
@@ -81,7 +81,12 @@ class COGSResource extends Resource
 
                 Tables\Columns\TextColumn::make('profit_per_unit')
                     ->label('Profit / Unit')
-                    ->money('IDR'),
+                    ->money('IDR')
+                    ->summarize([
+                        Tables\Columns\Summarizers\Sum::make()
+                            ->label('Total Profit'),
+                    ]),
+
 
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Transaction Date')
@@ -126,24 +131,5 @@ class COGSResource extends Resource
             'create' => Pages\CreateCOGS::route('/create'),
             'edit' => Pages\EditCOGS::route('/{record}/edit'),
         ];
-    }
-
-    /**
-     * Hitung profit_per_unit & total_selling sebelum save
-     */
-    public static function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['profit_per_unit'] = $data['selling_price'] - $data['purchase_price'];
-        $data['total_selling']   = $data['selling_price'] * $data['quantity_sold'];
-
-        return $data;
-    }
-
-    public static function mutateFormDataBeforeSave(array $data): array
-    {
-        $data['profit_per_unit'] = $data['selling_price'] - $data['purchase_price'];
-        $data['total_selling']   = $data['selling_price'] * $data['quantity_sold'];
-
-        return $data;
     }
 }
