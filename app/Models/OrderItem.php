@@ -45,11 +45,10 @@ class OrderItem extends Model
             // Replace data COGS (update kalau sudah ada)
             \App\Models\COGS::updateOrCreate(
                 [
-                    'product_id' => $orderItem->product_id,   // kunci unik
-                    'transaction_date' => now()->toDateString(), // bisa juga per hari
+                    'product_id' => $orderItem->product_id,  
+                    'transaction_date' => now()->toDateString(), 
                 ],
-                [
-                    'purchase_price' => $stock->price,
+                [ 
                     'quantity_sold'  => $sold, // total semua terjual
                     'total_selling'  => $sold * $stock->price,
                     'profit_per_unit'=> 0, // bisa hitung sesuai kebutuhan

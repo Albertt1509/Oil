@@ -12,6 +12,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters;
+use App\Filament\Exports\CogsExporter;
+use Filament\Tables\Actions\ExportAction;
 
 class COGSResource extends Resource
 {
@@ -79,15 +81,24 @@ class COGSResource extends Resource
                     ->money('IDR')
                     ->getStateUsing(fn($record) => $record->selling_price * $record->quantity_sold),
 
-                Tables\Columns\TextColumn::make('profit_per_unit')
-                    ->label('Profit / Unit')
+                Tables\Columns\TextColumn::make('total_selling')
+                    ->label('Total Selling')
                     ->money('IDR')
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
-                            ->label('Total Profit'),
+                            ->label('Grand Total Selling'),
                     ]),
+                Tables\Columns\TextColumn::make('profit_per_unit')
+                    ->label('Profit / Unit')
+                    ->money('IDR'),
 
-
+                Tables\Columns\TextColumn::make('total_profit')
+                    ->label('Total Profit')
+                    ->money('IDR')
+                    ->summarize([
+                        Tables\Columns\Summarizers\Sum::make()
+                            ->label('Grand Total Profit'),
+                    ]),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->label('Transaction Date')
                     ->date(),
@@ -116,7 +127,10 @@ class COGSResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
-            ->bulkActions([]);
+           ->headerActions([
+            ExportAction::make()->exporter(CogsExporter::class),
+        ]);
+
     }
 
     public static function getRelations(): array

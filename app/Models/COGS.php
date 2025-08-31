@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class COGS extends Model
 {
-    use HasFactory;      
-     protected $table = 'cogs';
-       protected $fillable = [
+    use HasFactory;
+    protected $table = 'cogs';
+    protected $fillable = [
         'product_id',
         'purchase_price',
         'selling_price',
@@ -19,34 +19,31 @@ class COGS extends Model
         'profit_per_unit',
     ];
 
-       public function product()
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }
 
-  protected static function booted()
-{
-    static::saving(function ($cogs) {
-        // hitung total selling
-        $cogs->total_selling = $cogs->selling_price * $cogs->quantity_sold;
+    protected static function booted()
+    {
+        static::saving(function ($cogs) {
+            $stock = \App\Models\Stock::where('product_id', $cogs->product_id)->first();
 
-        // hitung profit
-        $cogs->profit_per_unit = $cogs->total_selling > 0
-            ? ($cogs->selling_price - $cogs->purchase_price) * $cogs->quantity_sold
-            : 0;
-    });
+            if ($stock && empty($cogs->purchase_price)) { $cogs->purchase_price = $stock->price; }
 
-    static::saved(function ($cogs) {
-        // cari stock berdasarkan product_id
-        $stock = \App\Models\Stock::where('product_id', $cogs->product_id)->first();
-
-        if ($stock) {
-            // kurangi stok sesuai jumlah terjual
-            $stock->onHand = max(0, $stock->onHand - $cogs->quantity_sold);
-            $stock->save();
-        }
-    });
-}
+            $cogs->total_selling = $cogs->selling_price * $cogs->quantity_sold;
+            $cogs->profit_per_unit = $cogs->selling_price - $cogs->purchase_price;
+            $cogs->total_profit = $cogs->profit_per_unit * $cogs->quantity_sold;
+        });
 
 
+        static::saved(function ($cogs) {
+            $stock = \App\Models\Stock::where('product_id', $cogs->product_id)->first();
+
+            if ($stock) {
+                $stock->onHand = max(0, $stock->onHand - $cogs->quantity_sold);
+                $stock->save();
+            }
+        });
+    }
 }
