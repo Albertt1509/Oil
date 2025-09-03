@@ -25,9 +25,6 @@ class CogsExporter extends Exporter
     protected int $chunkSize = 0;
 
     // ubah writer jadi Excel (XLSX)
-    protected string $fileExtension = 'xlsx';
-    protected string $writerType = \Filament\Actions\Exports\Writers\XlsxWriter::class;
-
     public static function getCompletedNotificationBody(Export $export): string
     {
         return 'Export data berhasil. File tersedia untuk diunduh.';
