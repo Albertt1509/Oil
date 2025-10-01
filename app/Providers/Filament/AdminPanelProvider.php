@@ -29,23 +29,29 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Admin Panel')
             ->colors([
                 'primary' => Color::Amber,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources\\YResource')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            // ->pages([
+            //     Pages\Dashboard::class,
+            // ])
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\Pages\Dashboard::class,
             ])
-            // Hapus ini jika mau, karena diganti yang bawah
-            // ->widgets([])
+
+        
             ->widgets([
+
                 OrderStats::class,
                 OrderPieChart::class,
                 OrdersChart::class,

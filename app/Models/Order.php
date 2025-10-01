@@ -27,6 +27,11 @@ class Order extends Model
         return $this->belongsTo(category::class);
     }
 
+    public function transfer()
+    {
+        return $this->hasOne(Transfer::class, 'order_id', 'id');
+    }
+  
     public function items(){
         return $this->hasMany(OrderItem::class);
     }   

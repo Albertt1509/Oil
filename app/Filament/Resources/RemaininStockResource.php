@@ -2,27 +2,29 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\StockResource\Pages;
-use App\Models\Stock;
+use App\Filament\Resources\RemaininStockResource\Pages;
+use App\Filament\Resources\RemaininStockResource\RelationManagers;
+use App\Models\RemaininStock;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Filters;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class StockResource extends Resource
+class RemaininStockResource extends Resource
 {
-    protected static ?string $model = Stock::class;
+    protected static ?string $model = RemaininStock::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-cube';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     public static function form(Form $form): Form
-    {
+     {
         return $form
             ->schema([
                 Select::make('product_id')
@@ -39,16 +41,15 @@ class StockResource extends Resource
                     ->preload()
                     ->relationship('category', 'name'),
 
-                TextInput::make('onHand')
+                TextInput::make('sale')
                     ->numeric()
                     ->required()
-                    ->label('On Hand'),
+                    ->label('Sale'),
 
-                TextInput::make('price')
+                TextInput::make('stock')
                     ->numeric()
-                    ->prefix('Rp')
                     ->required()
-                    ->label('Price'),
+                    ->label('Stock'),
 
                 DatePicker::make('transaction_date')
                     ->label('Transaction Date')
@@ -61,46 +62,53 @@ class StockResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('product.name')
+                 Tables\Columns\TextColumn::make('product.name')
                     ->label('Product')
                     ->searchable(),
-
+                    
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Category')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('onHand')
-                    ->label('Initial On Hand')
+                Tables\Columns\TextColumn::make('sale')
+                    ->label('Sale')
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('price')
-                    ->money('IDR')
+                Tables\Columns\TextColumn::make('stock')
+                    ->label('Stock')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->date('d M Y')
                     ->sortable(),
+
             ])
             ->filters([
-                Filters\SelectFilter::make('product')
-                    ->relationship('product', 'name'),
+                //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
             ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListStocks::route('/'),
-            'create' => Pages\CreateStock::route('/create'),
-            'edit' => Pages\EditStock::route('/{record}/edit'),
+            'index' => Pages\ListRemaininStocks::route('/'),
+            'create' => Pages\CreateRemaininStock::route('/create'),
+            'edit' => Pages\EditRemaininStock::route('/{record}/edit'),
         ];
     }
 }

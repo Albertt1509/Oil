@@ -15,5 +15,8 @@ class Transfer extends Model
         'gambar',
     ];
 
+   public function orders(){
+       return $this->belongsTo(Order::class);
+    }   
 }
 
