@@ -66,12 +66,10 @@ class COGSResource extends Resource
                 ->label('Product'),
 
             Tables\Columns\TextColumn::make('purchase_price')
-                ->label('Purchase Price')
-                ->money('IDR'),
+                ->label('Purchase Price'),
 
             Tables\Columns\TextColumn::make('selling_price')
-                ->label('Selling Price')
-                ->money('IDR'),
+                ->label('Selling Price'),
 
             Tables\Columns\TextColumn::make('quantity_sold')
                 ->label('Quantity Sold'),
@@ -83,19 +81,16 @@ class COGSResource extends Resource
 
             Tables\Columns\TextColumn::make('total_selling')
                 ->label('Total Selling')
-                ->money('IDR')
                 ->summarize([
                     Tables\Columns\Summarizers\Sum::make()
                         ->label('Grand Total Selling'),
                 ]),
 
             Tables\Columns\TextColumn::make('profit_per_unit')
-                ->label('Profit / Unit')
-                ->money('IDR'),
+                ->label('Profit / Unit'),
 
             Tables\Columns\TextColumn::make('total_profit')
                 ->label('Total Profit')
-                ->money('IDR')
                 ->summarize([
                     Tables\Columns\Summarizers\Sum::make()
                         ->label('Grand Total Profit'),
