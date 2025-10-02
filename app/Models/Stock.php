@@ -13,6 +13,7 @@ class Stock extends Model
         'product_id',
         'category_id',
         'onHand',
+        'current_stock',
         'price',
         'transaction_date',
         'isGoing',

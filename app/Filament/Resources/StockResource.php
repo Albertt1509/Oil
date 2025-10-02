@@ -42,7 +42,13 @@ class StockResource extends Resource
                 TextInput::make('onHand')
                     ->numeric()
                     ->required()
-                    ->label('On Hand'),
+                    ->label('Current Stock'),
+
+                TextInput::make('current_stock')
+                    ->numeric()
+                    ->required()
+                    ->label('Initial On Hand'),
+
 
                 TextInput::make('price')
                     ->numeric()
@@ -69,10 +75,14 @@ class StockResource extends Resource
                     ->label('Category')
                     ->searchable(),
 
-                Tables\Columns\TextColumn::make('onHand')
+                Tables\Columns\TextColumn::make('current_stock')
                     ->label('Initial On Hand')
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('onHand')
+                    ->label('Current Stock')                  
+                    ->sortable(),
+               
                 Tables\Columns\TextColumn::make('price')
                     ->money('IDR')
                     ->sortable(),

@@ -14,8 +14,8 @@ class OrderObserver
                 ->title('🚨 Pesanan Baru Masuk!')
                 ->body("Order #{$order->id} dengan metode {$order->payment_method}. Tolong segera konfirmasi.")
                 ->danger()
-                ->persistent()
-                ->sendToDatabase($order); // simpan ke DB
+                ->persistent();
+                // ->sendToDatabase($order); // simpan ke DB
         }
     }
 }
